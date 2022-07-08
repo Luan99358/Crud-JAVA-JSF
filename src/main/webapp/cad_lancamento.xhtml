@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui = "http://java.sun.com/jsf/facelets">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<title>Insert title here</title>
+</head>
+   
+   <!-- include do menu  -->
+   <ui:include src="/menu.xhtml"></ui:include>
+		
+	<h:form rendered="#{(pessoaBean.employeeAcess())}"  id="formLancamento">
+		
+
+		
+		<h1><h:graphicImage  value="/resources/img/arquivo.png" width="50"/>Cadastro de Lançamentos</h1>
+	    
+	  
+	    <h:panelGrid columns="2">
+	    
+	       <f:facet name="header">
+	          <h:outputText value="Cadastro de Lancamentos"/> 
+	       </f:facet>
+	   
+	       <h:outputLabel>Id:</h:outputLabel>
+	    
+	       <h:inputText value="#{lancamentosBean.lacamentos.id}" readonly="true"/>
+	     
+	       <h:outputLabel>Nota:</h:outputLabel>
+	    
+		   <h:inputText id="input_nota" value="#{lancamentosBean.lacamentos.numeroNotaFiscal}"/> 
+		 
+		   <h:outputLabel>Empresa Origem :</h:outputLabel>
+		
+		   <h:inputText id="input_origem" value="#{lancamentosBean.lacamentos.empresaOrigin}"/> 
+		 
+		   <h:outputLabel>Empresa Destino:</h:outputLabel>
+		 
+		   <h:inputText id="input_destino" value="#{lancamentosBean.lacamentos.empresaDestino}"/>
+		   
+		
+		   <h:panelGroup>
+		 	 <!--  <h:inputText id="input_dataNasc" value="#{pessoaBean.pessoa.dataNasc}"/> 
+		   <br/> -->
+		     <h:commandButton value="Salvar" action="#{lancamentosBean.salvar}" image="/resources/img/savedisk_floppydisk_guardar_1543.png" title="Salvar" />
+		     <h:commandButton value="Novo" action="#{lancamentosBean.novo}" image="/resources/img/new_add_user_16734.png" title="Novo"/>
+		     <h:commandButton value="Deletar" action="#{lancamentosBean.deleteID}" image="/resources/img/delete_remove_user_16732.png" title="Deletar"/>
+		     <h:commandButton value="Limpar" type="reset" image="/resources/img/delete_remove_page_document_16678.png" title="Limpar" />
+		     
+		     
+		 
+	  	   </h:panelGroup>
+		 
+		 
+		 
+		 </h:panelGrid>
+		
+		 
+		 <h:dataTable value="#{lancamentosBean.list}" var="lancamento" border="1">
+		    
+		    <f:facet name="header">
+		       Lista de Usuários Cadastradas
+		        
+		    </f:facet>
+		    
+		    <h:column>
+		       
+		    <f:facet name="header">
+		       ID 
+		    </f:facet>
+		    
+		      <h:outputText value="#{lancamento.id}"/>
+		    </h:column>
+		   
+		    
+		    <h:column>
+		       
+		      <f:facet name="header">
+		         Nota 
+		      </f:facet>
+		      <h:outputText value="#{lancamento.numeroNotaFiscal}"/>
+		    </h:column>
+		   
+		    <h:column>
+		      <f:facet name="header">
+		         Empresa de origem
+		      </f:facet>
+		      <h:outputText value="#{lancamento.empresaOrigin}"/>
+		    </h:column>
+		    
+		     <h:column>
+		      <f:facet name="header">
+		         Empresa de destinino
+		      </f:facet>
+		      <h:outputText value="#{lancamento.empresaDestino}"/>
+		    </h:column>
+	
+		 
+		 <h:column >
+		      <f:facet name="header">
+		         Ação
+		      </f:facet>
+		   
+		       <h:panelGrid columns="2" border="1">
+		   <h:column >
+		     <h:commandLink title="Editar">
+		        <f:setPropertyActionListener value="#{lancamento}" target="#{lancamentosBean.lacamentos}"/>
+		        <h:graphicImage value="/resources/img/configure_user_16726.png"></h:graphicImage>
+		     </h:commandLink>
+		   </h:column>
+		     
+		    
+		     <h:column >
+		     <h:commandLink  title="Excluir" action="#{lancamentosBean.deleteID}" >
+		        <f:setPropertyActionListener value="#{lancamento}" target="#{lancamentosBean.lacamentos}"/>
+		       <h:graphicImage value="/resources/img/delete_remove_user_16732.png"></h:graphicImage>
+		        
+		     </h:commandLink>
+		   </h:column>
+		    </h:panelGrid>
+		    </h:column>
+		</h:dataTable>
+		   
+
+		
+		
+		
+	</h:form>
+	
+   
+</html>

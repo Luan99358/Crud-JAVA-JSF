@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Frameset//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-frameset.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:ui = "http://java.sun.com/jsf/facelets"
+    xmlns:pt="http://xmlns.jcp.org/jsf/passthrough">
+<h:head>
+	<title>Cadastro de Usuário</title>
+</h:head>
+
+<h:body>
+  
+	   <!-- include do menu  -->
+    <ui:include src="/menu.xhtml"></ui:include>
+		
+	<h:form id="formPessoa" rendered="#{(pessoaBean.employeeAcess())}" >
+		
+		
+		
+       
+		<h1><h:graphicImage  value="/resources/img/arquivo.png" width="50"/>Cadastro de Usuário</h1>
+	    
+	    
+	    
+	    <h:messages infoStyle="color:green"/>
+	    
+	    <h:panelGrid columns="2">
+	    
+	       <f:facet name="header">
+	          <h:outputText value="Cadastro em JSF"/> 
+	       </f:facet>
+	   
+	       <h:outputLabel>Id:</h:outputLabel>
+	    
+	       <h:inputText value="#{pessoaBean.pessoa.id}" readonly="true"/>
+	     
+	       <h:outputLabel>Nome:</h:outputLabel>
+	    
+		   <h:inputText pt:placeholder="Informe o Nome" id="input_name" value="#{pessoaBean.pessoa.nome}" >
+		    
+		   </h:inputText> 
+		 
+		   <h:outputLabel>Sobrenome:</h:outputLabel>
+		
+		   <h:inputText  pt:placeholder="Informe o Sobrenome" id="input_sobrenome" value="#{pessoaBean.pessoa.sobrenome}"/> 
+		 
+		   <h:outputLabel>Idade:</h:outputLabel>
+		 
+		   <h:inputText  pt:placeholder="Informe a Idade" id="input_idade" value="#{pessoaBean.pessoa.idade}"/>
+		   
+		   <h:outputLabel>Login:</h:outputLabel>
+		
+		   <h:inputText  pt:placeholder="Informe o Login" id="input_login" value="#{pessoaBean.pessoa.login}"/> 
+		 
+		   <h:outputLabel>Senha:</h:outputLabel>
+		 
+		   <h:inputSecret  pt:placeholder="Informe a Senha" id="input_password" value="#{pessoaBean.pessoa.password}"/>
+		   
+		   
+		 
+		   <h:outputLabel>Data de Nascimento:</h:outputLabel>
+	       <h:inputText value="#{pessoaBean.pessoa.dataNasc}" converterMessage="Data de nascimento Invalida!">
+	          <f:convertDateTime pattern="dd/MM/yyyy" locale="pt_BR" timeZone="GMT-3:00"/>
+	       </h:inputText>
+	       
+	   
+	       
+		   
+		   <h:outputLabel value="Sexo"/>
+		    
+		    <h:selectOneMenu id="campoSexo" value="#{pessoaBean.pessoa.sexo}" >
+		        
+		        <f:selectItem itemValue="NAO" itemLabel="[-Selecione-]" noSelectionOption="true"/>		        
+		        <f:selectItem itemValue="Masculino"/>
+		        <f:selectItem itemValue="Feminino"/>
+		        
+		    </h:selectOneMenu>
+		   
+		    <h:outputLabel value="Frameworks"/>
+		    
+		    <h:selectManyMenu id="campoFrameworks" value="#{pessoaBean.pessoa.frameworks}" style="height:100px;">
+		        
+		        <f:selectItem itemValue="NAO" itemLabel="[-Selecione-]" noSelectionOption="true"/>		        
+		        <f:selectItem itemValue="Hibernate"/>
+		        <f:selectItem itemValue="Spring MVC"/>
+		        <f:selectItem itemValue="JPA"/>
+		        <f:selectItem itemValue="PrimeFaces"/>
+		        <f:selectItem itemValue="JSF"/>
+		        
+		    </h:selectManyMenu>
+		    
+		      
+		   <h:outputLabel value="Nível"/>
+		    
+		    <h:selectOneMenu  id="campoNivel" value="#{pessoaBean.pessoa.nivel}" >
+		        
+		        <f:selectItem itemDisabled="true" itemLabel="[-Selecione-]" noSelectionOption="true"/>		        
+		        <f:selectItem itemValue="Administrador" itemDisabled="#{!(pessoaBean.adminAcess())}" />
+		        <f:selectItem itemValue="Funcionário"/>
+		        <f:selectItem itemValue="Usuário"/>		        
+		        
+		    </h:selectOneMenu>
+		    
+		      
+		    
+		 
+		    <h:outputLabel value="Concordo com os termos :"/>
+		    
+		    <h:selectBooleanCheckbox value="#{pessoaBean.pessoa.concordo}">
+		      
+		    </h:selectBooleanCheckbox>
+		    
+		 
+	
+		
+		   <h:panelGroup>
+		 	 <!--  <h:inputText id="input_dataNasc" value="#{pessoaBean.pessoa.dataNasc}"/> 
+		   <br/> -->
+		     <h:commandButton rendered="#{(pessoaBean.employeeAcess())}" value="Salvar" action="#{pessoaBean.salvar}" image="/resources/img/savedisk_floppydisk_guardar_1543.png" title="Salvar" />
+		     <h:commandButton rendered="#{(pessoaBean.employeeAcess())}" value="Novo" action="#{pessoaBean.novo}" image="/resources/img/new_add_user_16734.png" title="Novo"/>
+		     <h:commandButton rendered="#{(pessoaBean.adminAcess())}" value="Deletar" action="#{pessoaBean.deleteID}" image="/resources/img/delete_remove_user_16732.png" title="Deletar"/>
+		     <h:commandButton rendered="#{(pessoaBean.employeeAcess())}" value="Limpar" type="reset" image="/resources/img/delete_remove_page_document_16678.png" title="Limpar" />
+		     
+		     
+		 
+	  	   </h:panelGroup>
+		 
+		 
+		 
+		 </h:panelGrid>
+		
+		 
+		 <h:dataTable value="#{pessoaBean.listPessoas}" var="pessoa" border="1">
+		    
+		    <f:facet name="header">
+		       Lista de Usuários Cadastradas
+		        
+		    </f:facet>
+		    
+		    <h:column>
+		       
+		    <f:facet name="header">
+		       ID 
+		    </f:facet>
+		    
+		      <h:outputText value="#{pessoa.id}"/>
+		    </h:column>
+		   
+		    
+		    <h:column>
+		       
+		      <f:facet name="header">
+		         Nome 
+		      </f:facet>
+		      <h:outputText value="#{pessoa.nome}"/>
+		    </h:column>
+		   
+		    <h:column>
+		      <f:facet name="header">
+		         Sobrenomenome 
+		      </f:facet>
+		      <h:outputText value="#{pessoa.sobrenome}"/>
+		    </h:column>
+	
+		 
+		 <h:column rendered="#{(pessoaBean.employeeAcess())}" >
+		      <f:facet name="header">
+		         Ação
+		      </f:facet>
+		   
+		       <h:panelGrid columns="2" border="1">
+		   <h:column >
+		     <h:commandLink title="Editar">
+		        <f:setPropertyActionListener value="#{pessoa}" target="#{pessoaBean.pessoa}"/>
+		        
+		        <h:graphicImage value="/resources/img/configure_user_16726.png"></h:graphicImage>
+		     </h:commandLink>
+		   </h:column>
+		     
+		    
+		     <h:column  rendered="#{(pessoaBean.adminAcess())}" >
+		     <h:commandLink  title="Excluir" action="#{pessoaBean.deleteID}" >
+		        <f:setPropertyActionListener value="#{pessoa}" target="#{pessoaBean.pessoa}"/>
+		       
+		       <h:graphicImage value="/resources/img/delete_remove_user_16732.png"></h:graphicImage>
+		        
+		     </h:commandLink>
+		   </h:column>
+		    </h:panelGrid>
+		    </h:column>
+		</h:dataTable>
+		   
+        
+		
+
+		
+	</h:form>
+	
+	<h:form id="formEndereco" rendered="#{(pessoaBean.employeeAcess())}" >
+		
+       <h:panelGrid columns="2">
+       
+	       <f:facet name="header">
+	          <h:outputText value="Cadastro de Endereco"/> 
+	       </f:facet>
+	   
+	       <h:outputLabel>Id:</h:outputLabel>
+	    
+	       <h:inputText value="#{pessoaBean.enderecoBean.endereco.id}" readonly="true"/>
+	     
+	       <h:outputLabel>CEP:</h:outputLabel>
+	    
+		     <h:inputText  pt:placeholder="Informe o CEP" id="input_cep" value="#{pessoaBean.enderecoBean.endereco.cep}">
+		      <f:ajax event="blur" execute="@all" listener="#{enderecoBean.pesquisaCep}"
+		      render="input_cep input_uf input_localidade input_bairro input_logradouro"/>
+		   </h:inputText>
+	       
+		   
+		 
+		   <h:outputLabel>UF:</h:outputLabel>
+		
+		   <h:inputText id="input_uf" value="#{pessoaBean.enderecoBean.endereco.uf}"/> 
+		 
+		   <h:outputLabel>Localidade:</h:outputLabel>
+		 
+		   <h:inputText id="input_localidade" value="#{pessoaBean.enderecoBean.endereco.localidade}"/>
+		   
+		   <h:outputLabel>Bairro:</h:outputLabel>
+		
+		   <h:inputText id="input_bairro" value="#{pessoaBean.enderecoBean.endereco.bairro}"/> 
+		 
+		   <h:outputLabel>Logradouro:</h:outputLabel>
+		 
+		   <h:inputText  pt:placeholder="Informe o Logradouro" id="input_logradouro" value="#{pessoaBean.enderecoBean.endereco.logradouro}"/>
+		   
+		    <h:outputLabel>Número:</h:outputLabel>
+		 
+		   <h:inputText  pt:placeholder="Informe o Número" id="input_numero" value="#{pessoaBean.enderecoBean.endereco.numero}"/>
+		   
+		    <h:outputLabel>Complemento:</h:outputLabel>
+		 
+		   <h:inputText id="input_complemento" value="#{pessoaBean.enderecoBean.endereco.complemento}"/>
+		   
+		   
+    
+	
+
+		   <h:panelGroup>
+	
+
+		     <h:commandButton rendered="#{(pessoaBean.employeeAcess())}" 
+		       value="Salvar" action="#{pessoaBean.enderecoBean.salvarEndereco}" image="/resources/img/savedisk_floppydisk_guardar_1543.png" title="Salvar"/>
+		
+		     <h:commandButton rendered="#{(pessoaBean.employeeAcess())}" value="Novo" action="#{pessoaBean.enderecoBean.novo}" image="/resources/img/new_add_user_16734.png" title="Novo"/>
+		     <h:commandButton rendered="#{(pessoaBean.adminAcess())}" value="Deletar" action="#{pessoaBean.enderecoBean.deleteID}" image="/resources/img/delete_remove_user_16732.png" title="Deletar"/>
+		     <h:commandButton rendered="#{(pessoaBean.employeeAcess())}" value="Limpar" type="reset" image="/resources/img/delete_remove_page_document_16678.png" title="Limpar" />
+		   
+		     
+		 
+	  	   </h:panelGroup>
+		 
+		 
+		 
+		 </h:panelGrid>
+		
+		 
+		 <h:dataTable  value="#{pessoaBean.enderecoBean.enderecos}" var="endereco" border="1">
+
+		    
+		    <f:facet name="header">
+		       Lista de Endereços
+		        
+		    </f:facet>
+		    
+		    <h:column>
+		       
+		    <f:facet name="header">
+		       ID 
+		    </f:facet>
+		    
+		      <h:outputText value="#{endereco.id}"/>
+		    </h:column>
+		   
+		    
+		    <h:column>
+		       
+		      <f:facet name="header">
+		         CEP 
+		      </f:facet>
+		      <h:outputText value="#{endereco.cep}"/>
+		    </h:column>
+		   
+		    <h:column>
+		      <f:facet name="header">
+		         ID Usuário
+		      </f:facet>
+		      <h:outputText value="#{endereco.usuario.id}"/>
+		    </h:column>
+	
+		 
+		 <h:column rendered="#{(pessoaBean.employeeAcess())}" >
+		      <f:facet name="header">
+		         Ação
+		      </f:facet>
+		   
+		       <h:panelGrid columns="2" border="1">
+		   <h:column >
+		     <h:commandLink title="Editar">
+		        <f:setPropertyActionListener value="#{endereco}" target="#{pessoaBean.enderecoBean.endereco}"/>
+		        <h:graphicImage value="/resources/img/configure_user_16726.png"></h:graphicImage>
+		     </h:commandLink>
+		   </h:column>
+		     
+		    
+		     <h:column  rendered="#{(pessoaBean.adminAcess())}" >
+		     <h:commandLink  title="Excluir" action="#{enderecoBean.deleteID}" >
+		        <f:setPropertyActionListener value="#{endereco}" target="#{pessoaBean.enderecoBean.endereco}"/>
+		       <h:graphicImage value="/resources/img/delete_remove_user_16732.png"></h:graphicImage>
+		        
+		     </h:commandLink>
+		   </h:column>
+		    </h:panelGrid>
+		    </h:column>
+		</h:dataTable>
+		   
+
+		
+		
+	</h:form>
+	
+
+	
+
+</h:body>
+
+</html>
