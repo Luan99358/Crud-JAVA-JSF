@@ -1,6 +1,11 @@
 package JSF_01.JSF_01;
 
+import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -18,6 +23,9 @@ import javax.faces.component.behavior.AjaxBehavior;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.event.AjaxBehaviorEvent;
+import javax.imageio.ImageIO;
+import javax.servlet.http.Part;
+import javax.xml.bind.DatatypeConverter;
 
 import org.xml.sax.InputSource;
 
@@ -35,24 +43,24 @@ import repository.IDaoPessoaImpl;
 public class PessoaBean {
 	
 	private  Pessoa pessoa = new Pessoa();
+	
 	private DaoGeneric<Pessoa> daoGeneric = new DaoGeneric<Pessoa>();
+	
 	private List<Pessoa> pessoas = new ArrayList<Pessoa>();
+	
 	private IDaoPessoa iDaoPessoa = new IDaoPessoaImpl();
 	
 	@ManagedProperty(value = "#{enderecoBean}")
 	private EnderecoBean enderecoBean;
 	
-
-
+    private Part arquivoFoto;
 	
-
-
-
-
-	public String salvar() {
+    
+    public String salvar() throws IOException {
 		/*daoGeneric.salvarMerge(pessoa); salvando sem o merge
 		pessoa = new Pessoa();*/
-		pessoa = daoGeneric.salvarMerge(pessoa);
+    	setImage();
+    	pessoa = daoGeneric.salvarMerge(pessoa);
 		loadPessoas();
 		Msg("Cadastrado  com sucesso !");
 		return "";
@@ -63,6 +71,7 @@ public class PessoaBean {
 	public String deleteID() {
 		iDaoPessoa.deleteIdHeritage(Endereco.class, pessoa.getId());
 		iDaoPessoa.deleteIdHeritage(Lancamentos.class, pessoa.getId());
+		daoGeneric.deleteId(pessoa); 
 		pessoa = new Pessoa();
 		loadPessoas();
 		Msg("Deletado com sucesso !");
@@ -86,8 +95,67 @@ public class PessoaBean {
 	}
 	
 	
- 	
- 	public List<Pessoa> getPessoas() {
+     /*Metodo que converte um inputStreampara array de Byte*/
+    private byte[] getByte(InputStream is) throws IOException {
+  	  
+  	  int len;
+  	  int size = 1024;
+  	  byte[] buf = null;
+  	  if(is instanceof ByteArrayInputStream) {
+  		  size = is.available();
+  		  buf = new byte[size];
+  		  len = is.read(buf,0,size);
+  	  }else {
+  		  ByteArrayOutputStream bos = new ByteArrayOutputStream();
+  		  buf = new byte[size];
+  		  
+  		  while ((len = is.read(buf,0,size))!= -1) {
+  			bos.write(buf,0,len);
+  			
+  		}
+  		  buf = bos.toByteArray();
+  	  }
+  	  
+  	  return buf;
+    } 
+  	
+    private void setImage() throws IOException {
+  	  /*processando imagem*/
+    	byte [] imagem = getByte(arquivoFoto.getInputStream());
+    	pessoa.setFotoIconBOriginal(imagem);/*salva a imagem original*/
+    	
+    	/*transformando em bufferImage*/
+    	BufferedImage  bufferedImage =  ImageIO.read(new ByteArrayInputStream(imagem));
+    	
+    	/*pega o tipo da imagem*/
+    	int type = bufferedImage.getType() == 0 ? BufferedImage.TYPE_INT_ARGB : bufferedImage.getType();
+    	
+    	int largura = 200;
+    	int altura = 200;
+    	
+    	/*Criando a miniatura*/
+    	BufferedImage miniatura = new BufferedImage(largura,altura,type);
+    	Graphics2D graphics2d = miniatura.createGraphics();
+    	graphics2d.drawImage(bufferedImage,0,0,largura,altura, null);
+    	graphics2d.dispose();
+    	
+    	/*Escrever novamente a imagem em tamanho menor*/
+    	ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    	String extensao = arquivoFoto.getContentType().split("\\/")[1];/*image/png*/
+    	ImageIO.write(miniatura, extensao, baos);
+    	
+  		String miniImagem = "data:"+arquivoFoto.getContentType()+";base64,"+
+  		       DatatypeConverter.printBase64Binary(baos.toByteArray());
+    	
+  		pessoa.setFotoIconBase64(miniImagem);
+  		pessoa.setExtensao(extensao);
+    }  
+    
+ 
+     
+     
+     
+     public List<Pessoa> getPessoas() {
  		return pessoas;
  	}
 
@@ -141,6 +209,28 @@ public class PessoaBean {
 		this.enderecoBean = enderecoBean;
 	}
 	
+	public IDaoPessoa getiDaoPessoa() {
+		return iDaoPessoa;
+	}
+
+
+
+	public void setiDaoPessoa(IDaoPessoa iDaoPessoa) {
+		this.iDaoPessoa = iDaoPessoa;
+	}
+	
+	
+	public Part getArquivoFoto() {
+		return arquivoFoto;
+	}
+
+
+
+	public void setArquivoFoto(Part arquivoFoto)  {
+		this.arquivoFoto = arquivoFoto;
+	
+	}
+
 
 	
 	public Pessoa getUserSession() {

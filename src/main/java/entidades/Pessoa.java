@@ -6,10 +6,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -45,8 +49,20 @@ public class Pessoa implements Serializable{
     private String password;
     
     private String nivel;
-
     
+    @Column(columnDefinition = "text")/*salva a base 64 em texto*/
+    private String fotoIconBase64;
+    
+    private String extensao;/*jpg ou png e etc */
+    
+    @Lob   /* grava o arquivo no banco de dados*/
+    @Basic(fetch = FetchType.LAZY)/*so carrrega quando pedido */
+    private byte[] fotoIconBOriginal;
+    
+
+
+
+
 	public Long getId() {
 		return id;
 	}
@@ -158,6 +174,28 @@ public class Pessoa implements Serializable{
 	}
 	
 
+	public String getFotoIconBase64() {
+		return fotoIconBase64;
+	}
+
+	public void setFotoIconBase64(String fotoIconBase64) {
+		this.fotoIconBase64 = fotoIconBase64;
+	}
+	public String getExtensao() {
+		return extensao;
+	}
+
+	public void setExtensao(String extensao) {
+		this.extensao = extensao;
+	}
+
+	public byte[] getFotoIconBOriginal() {
+		return fotoIconBOriginal;
+	}
+
+	public void setFotoIconBOriginal(byte[] fotoIconBOriginal) {
+		this.fotoIconBOriginal = fotoIconBOriginal;
+	}
 
 
 }

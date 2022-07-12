@@ -14,7 +14,7 @@
 	   <!-- include do menu  -->
     <ui:include src="/menu.xhtml"></ui:include>
 		
-	<h:form id="formPessoa" rendered="#{(pessoaBean.employeeAcess())}" >
+	<h:form id="formPessoa" enctype="multipart/form-data"  rendered="#{(pessoaBean.employeeAcess())}" >
 		
 		
 		
@@ -34,6 +34,10 @@
 	       <h:outputLabel>Id:</h:outputLabel>
 	    
 	       <h:inputText value="#{pessoaBean.pessoa.id}" readonly="true"/>
+	       
+	       <h:outputLabel>Foto:</h:outputLabel>
+	      
+	       <h:inputFile id ="foto" value="#{pessoaBean.arquivoFoto}"></h:inputFile>
 	     
 	       <h:outputLabel>Nome:</h:outputLabel>
 	    
@@ -161,6 +165,14 @@
 		         Sobrenomenome 
 		      </f:facet>
 		      <h:outputText value="#{pessoa.sobrenome}"/>
+		    </h:column>
+		    
+		     
+		    <h:column>
+		      <f:facet name="header">
+		         Foto
+		      </f:facet>
+		      <h:graphicImage width="60" height="60" value="#{pessoa.fotoIconBase64}"/>
 		    </h:column>
 	
 		 
