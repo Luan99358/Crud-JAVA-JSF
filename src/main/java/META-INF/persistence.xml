@@ -22,6 +22,13 @@
            <property name="hibernate.show_sql" value="true"/>  <!-- aparece o sql no console -->
            <property name="hibernate.format_sql" value="true"/>  <!-- aparece o sql no console -->
            <property name="hibernate.hbm2ddl.auto" value="update"/>  <!-- cria e atuliza o as tabelas do BD -->
+           <!-- c3p0 config -->
+           <property name="hibernate.c3p0.min_size" value="5"/> <!-- minimo de conexoes disponoveis -->
+           <property name="hibernate.c3p0.max_size" value="100"/><!-- max de conexoes -->
+           <property name="hibernate.c3p0.timeout" value="300"/><!-- tempo maximo de mantimento de uma conexao-->
+           <property name="hibernate.c3p0.max_statements" value="50"/><!-- guarda transaçoes em cash por muita demanda de uso -->
+           <property name="hibernate.c3p0.idle_test_period" value="120"/><!-- tempo qa porta deve servalidada antes de ser fechada -->
+          
         </properties>
 	
 	</persistence-unit>

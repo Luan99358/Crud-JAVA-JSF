@@ -57,9 +57,9 @@ public class PessoaBean {
 	
     
     public String salvar() throws IOException {
-		/*daoGeneric.salvarMerge(pessoa); salvando sem o merge
-		pessoa = new Pessoa();*/
-    	setImage();
+		//daoGeneric.salvarMerge(pessoa); 
+		//pessoa = new Pessoa();
+    
     	pessoa = daoGeneric.salvarMerge(pessoa);
 		loadPessoas();
 		Msg("Cadastrado  com sucesso !");
@@ -226,9 +226,11 @@ public class PessoaBean {
 
 
 
-	public void setArquivoFoto(Part arquivoFoto)  {
+	public void setArquivoFoto(Part arquivoFoto) throws IOException  {
 		this.arquivoFoto = arquivoFoto;
-	
+  	  if(arquivoFoto != null) {
+		setImage();
+  	  }
 	}
 
 
